@@ -1,7 +1,7 @@
 libTheora_dyn
 ===================
 
-It is free pascal bindings and wrapper around Theora library. Theora is a free and open video compression format from the Xiph.org Foundation. Like all our multimedia technology it can be used to distribute film and video online and on disc without the licensing and royalty fees or vendor lock-in associated with other formats. 
+It is free pascal bindings and wrapper around Theora library. Theora is a free and open video compression format from the Xiph.org Foundation. Like all Xiph multimedia technologies, it can be used to distribute movies and videos online and on discs without royalties and royalties or vendor binding associated with other formats.
 
  
 ### Requirements
