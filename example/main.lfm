@@ -1,0 +1,301 @@
+object Form1: TForm1
+  Left = 270
+  Height = 446
+  Top = 157
+  Width = 685
+  BorderStyle = bsDialog
+  Caption = 'PNG to Theora'
+  ClientHeight = 446
+  ClientWidth = 685
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnShow = FormShow
+  LCLVersion = '2.2.2.0'
+  object Panel1: TPanel
+    Left = 0
+    Height = 446
+    Top = 0
+    Width = 369
+    Align = alLeft
+    BevelOuter = bvNone
+    BorderWidth = 10
+    Caption = 'Panel1'
+    ClientHeight = 446
+    ClientWidth = 369
+    TabOrder = 0
+    object ImagesList: TListBox
+      Left = 10
+      Height = 352
+      Top = 84
+      Width = 349
+      Align = alClient
+      ItemHeight = 0
+      TabOrder = 0
+      TopIndex = -1
+    end
+    object Label2: TLabel
+      Left = 10
+      Height = 19
+      Top = 65
+      Width = 349
+      Align = alTop
+      Caption = 'Images'
+      ParentColor = False
+    end
+    object Label1: TLabel
+      Left = 10
+      Height = 19
+      Top = 10
+      Width = 349
+      Align = alTop
+      Caption = 'Images dir'
+      ParentColor = False
+    end
+    object CurDirEdit: TDirectoryEdit
+      Left = 10
+      Height = 36
+      Top = 29
+      Width = 349
+      Directory = 'images'
+      ShowHidden = False
+      ButtonWidth = 23
+      NumGlyphs = 1
+      Align = alTop
+      MaxLength = 0
+      TabOrder = 1
+      OnChange = CurDirEditChange
+      OnEditingDone = CurDirEditEditingDone
+      Text = 'images'
+    end
+  end
+  object Panel2: TPanel
+    Left = 369
+    Height = 446
+    Top = 0
+    Width = 316
+    Align = alClient
+    BevelOuter = bvNone
+    ClientHeight = 446
+    ClientWidth = 316
+    TabOrder = 1
+    object Panel3: TPanel
+      Left = 0
+      Height = 173
+      Top = 273
+      Width = 316
+      Align = alBottom
+      BorderWidth = 8
+      ClientHeight = 173
+      ClientWidth = 316
+      TabOrder = 0
+      object Button1: TButton
+        Left = 9
+        Height = 32
+        Top = 9
+        Width = 298
+        Align = alTop
+        Caption = 'Convert Now'
+        OnClick = Button1Click
+        TabOrder = 0
+      end
+      object ProgressBar1: TProgressBar
+        Left = 9
+        Height = 20
+        Top = 41
+        Width = 298
+        Align = alTop
+        TabOrder = 1
+      end
+      object Label8: TLabel
+        Left = 9
+        Height = 19
+        Top = 61
+        Width = 298
+        Align = alTop
+        Caption = 'Log'
+        ParentColor = False
+      end
+      object Memo1: TMemo
+        Left = 9
+        Height = 84
+        Top = 80
+        Width = 298
+        Align = alClient
+        ScrollBars = ssAutoBoth
+        TabOrder = 2
+      end
+    end
+    object Panel4: TPanel
+      Left = 0
+      Height = 273
+      Top = 0
+      Width = 316
+      Align = alClient
+      ClientHeight = 273
+      ClientWidth = 316
+      TabOrder = 1
+      object SpinEdit2: TSpinEdit
+        Left = -200
+        Height = 36
+        Top = 176
+        Width = 120
+        MaxValue = 10000
+        MinValue = 45
+        TabOrder = 0
+        Value = 45
+      end
+      object ScrollBox1: TScrollBox
+        Left = 1
+        Height = 197
+        Top = 20
+        Width = 314
+        HorzScrollBar.Page = 256
+        VertScrollBar.Page = 195
+        Align = alClient
+        ClientHeight = 195
+        ClientWidth = 299
+        TabOrder = 1
+        object Label4: TLabel
+          Left = 8
+          Height = 19
+          Top = 8
+          Width = 74
+          Caption = 'Pixel Format'
+          ParentColor = False
+        end
+        object PixelFormatCBox: TComboBox
+          Left = 96
+          Height = 31
+          Top = 8
+          Width = 152
+          ItemHeight = 0
+          ItemIndex = 0
+          Items.Strings = (
+            '444'
+            '422'
+            '420'
+          )
+          Style = csDropDownList
+          TabOrder = 0
+          Text = '444'
+        end
+        object Label5: TLabel
+          Left = 8
+          Height = 19
+          Top = 56
+          Width = 42
+          Caption = 'Quality'
+          ParentColor = False
+        end
+        object QualityEdit: TTrackBar
+          Left = 96
+          Height = 51
+          Top = 40
+          Width = 153
+          Position = 5
+          TabOrder = 1
+        end
+        object Label6: TLabel
+          Left = 8
+          Height = 19
+          Top = 104
+          Width = 99
+          Caption = 'Bitrate, kbits/sec'
+          ParentColor = False
+        end
+        object BitrateEdit: TSpinEdit
+          Left = 136
+          Height = 36
+          Top = 96
+          Width = 112
+          MaxValue = 10000
+          MinValue = 45
+          TabOrder = 2
+          Value = 45
+        end
+        object Label9: TLabel
+          Left = 8
+          Height = 19
+          Top = 144
+          Width = 120
+          Caption = 'Sampling, ms/frame'
+          ParentColor = False
+        end
+        object SamplingEdit: TSpinEdit
+          Left = 136
+          Height = 36
+          Top = 136
+          Width = 112
+          MaxValue = 1000
+          MinValue = 4
+          TabOrder = 3
+          Value = 250
+        end
+        object Label10: TLabel
+          Left = 8
+          Height = 19
+          Top = 176
+          Width = 66
+          Caption = 'Comments'
+          ParentColor = False
+        end
+        object ValueListEditor1: TValueListEditor
+          Left = 8
+          Height = 100
+          Top = 200
+          Width = 248
+          DefaultColWidth = 80
+          FixedCols = 0
+          RowCount = 3
+          TabOrder = 4
+          DisplayOptions = [doAutoColResize, doKeyColFixed]
+          KeyOptions = [keyEdit, keyAdd]
+          Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goColSizing, goEditing, goAutoAddRows, goAlwaysShowEditor, goThumbTracking]
+          Strings.Strings = (
+            'ARTIST=OGLTheoraWrapper'
+            'LICENSE=Copyright (C) 2022. OGLTheoraWrapper'
+            'SUMMARY=Sample file - the result of encoding'
+          )
+          ColWidths = (
+            80
+            166
+          )
+        end
+      end
+      object OutFileEdit: TFileNameEdit
+        Left = 1
+        Height = 36
+        Top = 236
+        Width = 314
+        FileName = 'output.ogv'
+        FilterIndex = 0
+        DefaultExt = '*.ogv'
+        HideDirectories = False
+        ButtonWidth = 23
+        NumGlyphs = 1
+        Align = alBottom
+        MaxLength = 0
+        TabOrder = 2
+        Text = 'output.ogv'
+      end
+      object Label7: TLabel
+        Left = 1
+        Height = 19
+        Top = 217
+        Width = 314
+        Align = alBottom
+        Caption = 'Output filename'
+        ParentColor = False
+      end
+      object Label3: TLabel
+        Left = 1
+        Height = 19
+        Top = 1
+        Width = 314
+        Align = alTop
+        Caption = 'Encoder settings'
+        ParentColor = False
+      end
+    end
+  end
+end
