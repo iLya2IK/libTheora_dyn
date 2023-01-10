@@ -499,7 +499,7 @@ end;
 procedure TTheoraThreadedEncoder.Execute;
 var FS : TFileStream;
     Frame : TThreadedFrame;
-    tc : ITheoraComment;
+    tc : IOGGComment;
     i : integer;
 begin
   FS := TFileStream.Create(FFileName, fmOpenWrite or fmCreate);

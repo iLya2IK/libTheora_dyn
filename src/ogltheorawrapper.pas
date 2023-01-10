@@ -73,18 +73,6 @@ type
   property VData   : Pointer read GetVData write SetVData;
   end;
 
-  ITheoraComment = interface(IUnknown)
-  ['{4787E165-0BE9-4569-9C05-0356F6514972}']
-  function Ref : ptheora_comment;
-
-  procedure Init;
-  procedure Done;
-  procedure Add(const comment: String);
-  procedure AddTag(const tag, value: String);
-  function Query(const tag: String; index: integer): String;
-  function QueryCount(const tag: String): integer;
-  end;
-
   { ITheoraInfo }
 
   ITheoraInfo = interface(IUnknown)
@@ -205,14 +193,14 @@ type
   procedure PacketOut(last_p: boolean; op: IOGGPacket);
   function  PacketOut(last_p: boolean): IOGGPacket;
   procedure YUVin(yuv: ITheoraYUVbuffer);
-  procedure Comment(tc: ITheoraComment; op: IOGGPacket);
+  procedure Comment(tc: IOGGComment; op: IOGGPacket);
   procedure Tables(op: IOGGPacket);
 
   function Control(req: integer; buf: pointer; buf_sz: qword): integer;
 
   procedure SaveDefHeadersToStream(oggs : IOGGStreamState; str : TStream);
   procedure SaveCustomHeadersToStream(oggs : IOGGStreamState; str : TStream;
-    tc : ITheoraComment);
+    tc : IOGGComment);
   procedure SaveYUVBufferToStream(oggs : IOGGStreamState; str : TStream;
     buf : ITheoraYUVbuffer; is_last : Boolean);
   end;
@@ -220,7 +208,7 @@ type
 
   ITheoraDecoder = interface(ITheoraState)
   ['{EDCD1C8E-19F9-456F-ACB0-41CABFACD5AB}']
-  procedure Header(cc: ITheoraComment; op: IOGGPacket);
+  procedure Header(cc: IOGGComment; op: IOGGPacket);
   procedure PacketIn(op: IOGGPacket);
   procedure YUVout(yuv: ITheoraYUVbuffer);
   end;
@@ -258,7 +246,7 @@ type
     function GetOwnData: Boolean;
     procedure SetOwnData(value : Boolean);
   public
-    function Ref : pyuv_buffer;
+    function Ref : pyuv_buffer; inline;
 
     constructor Create(aOwnData : Boolean);
     destructor Destroy; override;
@@ -269,13 +257,13 @@ type
 
   { TTheoraComment }
 
-  TTheoraComment = class(TInterfacedObject, ITheoraComment)
+  TTheoraComment = class(TInterfacedObject, IOGGComment)
   private
     FRef : theora_comment;
     procedure Init;
     procedure Done;
   public
-    function Ref : ptheora_comment;
+    function Ref : Pointer; inline;
 
     constructor Create;
     destructor Destroy; override;
@@ -346,7 +334,7 @@ type
     procedure SetTargetBitrate(AValue : Integer);
     procedure SetWidth(AValue : Cardinal);
   public
-    function Ref : ptheora_info;
+    function Ref : ptheora_info; inline;
 
     constructor Create;
     destructor Destroy; override;
@@ -370,7 +358,7 @@ type
     function GetGranulePos : Int64;
     procedure SetGranulePos(value : Int64);
   public
-    function Ref : ptheora_state;
+    function Ref : ptheora_state; inline;
 
     constructor Create(inf : ITheoraInfo);
     destructor Destroy; override;
@@ -391,14 +379,14 @@ type
     procedure PacketOut(last_p: boolean; op: IOGGPacket);
     function PacketOut(last_p: boolean): IOGGPacket;
     procedure YUVin(yuv: ITheoraYUVbuffer);
-    procedure Comment(tc: ITheoraComment; op: IOGGPacket);
+    procedure Comment(tc: IOGGComment; op: IOGGPacket);
     procedure Tables(op: IOGGPacket);
 
     function Control(req: integer; buf: pointer; buf_sz: qword): integer;
 
     procedure SaveDefHeadersToStream(oggs : IOGGStreamState; str : TStream);
     procedure SaveCustomHeadersToStream(oggs : IOGGStreamState; str : TStream;
-      tc : ITheoraComment);
+      tc : IOGGComment);
     procedure SaveYUVBufferToStream(oggs : IOGGStreamState; str : TStream;
       buf : ITheoraYUVbuffer; is_last : Boolean);
   end;
@@ -409,7 +397,7 @@ type
   private
     procedure Init(inf : ITheoraInfo); override;
   public
-    procedure Header(cc: ITheoraComment; op: IOGGPacket);
+    procedure Header(cc: IOGGComment; op: IOGGPacket);
     procedure PacketIn(op: IOGGPacket);
     procedure YUVout(yuv: ITheoraYUVbuffer);
   end;
@@ -418,7 +406,7 @@ type
 
   TTheora = class
   public
-    class function NewComment : ITheoraComment;
+    class function NewComment : IOGGComment;
     class function NewEncoder(inf : ITheoraInfo) : ITheoraEncoder;
     class function NewDecoder(inf : ITheoraInfo) : ITheoraDecoder;
     class function NewInfo : ITheoraInfo;
@@ -534,7 +522,7 @@ begin
      raise ETheoraDecException.Create(R);
 end;
 
-procedure TTheoraDecoder.Header(cc : ITheoraComment; op : IOGGPacket);
+procedure TTheoraDecoder.Header(cc : IOGGComment; op : IOGGPacket);
 var R : integer;
 begin
   R := theora_decode_header(FInfo.Ref, cc.Ref, op.Ref);
@@ -604,7 +592,7 @@ begin
      raise ETheoraEncException.Create(R);
 end;
 
-procedure TTheoraEncoder.Comment(tc : ITheoraComment; op : IOGGPacket);
+procedure TTheoraEncoder.Comment(tc : IOGGComment; op : IOGGPacket);
 var R : integer;
 begin
   R := theora_encode_comment(tc.Ref, op.Ref);
@@ -628,14 +616,14 @@ end;
 
 procedure TTheoraEncoder.SaveDefHeadersToStream(oggs : IOGGStreamState;
   str : TStream);
-var tc : ITheoraComment;
+var tc : IOGGComment;
 begin
   tc := TTheora.NewComment;
   SaveCustomHeadersToStream(oggs, str, tc);
 end;
 
 procedure TTheoraEncoder.SaveCustomHeadersToStream(oggs : IOGGStreamState;
-  str : TStream; tc : ITheoraComment);
+  str : TStream; tc : IOGGComment);
 var op : IOGGPacket;
 begin
   op := TOgg.NewPacket;
@@ -724,7 +712,7 @@ begin
   theora_comment_clear(@FRef);
 end;
 
-function TTheoraComment.Ref : ptheora_comment;
+function TTheoraComment.Ref : Pointer;
 begin
   Result := @FRef;
 end;
@@ -1359,9 +1347,9 @@ end;
 
 { TTheora }
 
-class function TTheora.NewComment : ITheoraComment;
+class function TTheora.NewComment : IOGGComment;
 begin
-  Result := TTheoraComment.Create as ITheoraComment;
+  Result := TTheoraComment.Create as IOGGComment;
 end;
 
 class function TTheora.NewEncoder(inf : ITheoraInfo) : ITheoraEncoder;
